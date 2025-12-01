@@ -1,4 +1,4 @@
-# Fortnite Map and Loot Pool Bot
+# Fortnite Map and Loot Pool Bot  ![Static Badge](https://img.shields.io/badge/IN%20DEVELOPMENT-081461?style=for-the-badge)
 A custom Dicord bot created using C# and Discord.Net that provides users with the current map of the season and the current loot pool.
 
 ## Features
