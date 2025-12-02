@@ -37,3 +37,5 @@ This project uses **C#** and the **.NET 9.0**, however, I will also be consideri
     * Add your `DiscordToken` and `TestGuildId`.
 
 4.  **Run:** Launch the project in Visual Studio (F5).
+
+### This project is licensed under the MIT License. Read `LICENSE` for more information.
