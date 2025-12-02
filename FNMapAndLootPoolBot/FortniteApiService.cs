@@ -1,10 +1,14 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 public class FortniteApiService
 {
     private static readonly HttpClient _httpClient = new();
+
+    private const string ShopEndpoint = "https://fortnite-api.com/v2/shop/br";
     private const string MapEndpoint = "https://fortnite-api.com/v1/map";
 
     public async Task<string> GetMapImageUrlAsync()
@@ -42,19 +46,114 @@ public class FortniteApiService
         }
     }
 
-    public class MapImages
+    public async Task<List<ShopItem>> GetCurrentShopAsync()
     {
-        public string Pois { get; set; }
+        var items = new List<ShopItem>();
+
+        try
+        {
+            var jsonString = await _httpClient.GetStringAsync(ShopEndpoint);
+
+            var shopResponse = JsonSerializer.Deserialize<FortniteShopResponse>(
+                jsonString,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            );
+
+            // Loop through all sections (e.g., Featured, Daily, Special Offers)
+            if (shopResponse?.Data?.Sections != null)
+            {
+                foreach (var section in shopResponse.Data.Sections)
+                {
+                    // The API names the section in its 'name' property
+                    string sectionName = section.Name ?? "Uncategorized";
+
+                    // Loop through all entries in that section
+                    if (section.Entries != null)
+                    {
+                        foreach (var entry in section.Entries)
+                        {
+                            // A single entry can contain multiple items (e.g., bundles)
+                            if (entry.Items != null)
+                            {
+                                foreach (var itemDetail in entry.Items)
+                                {
+                                    items.Add(new ShopItem
+                                    {
+                                        Name = itemDetail.Name,
+                                        VBucksCost = entry.RegularPrice,
+                                        SectionName = sectionName
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (HttpRequestException ex)
+        {
+            Console.WriteLine($"API Request Error: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Shop Deserialization Error: {ex.Message}");
+        }
+
+        return items;
     }
 
-    public class MapData
-    {
-        public MapImages Images { get; set; }
-    }
+}
 
-    public class FortniteMapResponse
+public class ShopItem
+{
+    public string Name { get; set; }
+    public int VBucksCost { get; set; }
+    public string SectionName { get; set; }
+}
+public class MapImages
+{
+    public string Pois { get; set; }
+}
+
+public class MapData
+{
+    public MapImages Images { get; set; }
+}
+
+public class FortniteMapResponse
+{
+    public int Status { get; set; }
+    public MapData Data { get; set; }
+}
+
+public class ItemDetail
+{
+    public string Name { get; set; }
+}
+
+public class ShopEntry
+{
+    public int RegularPrice { get; set; }
+    public List<ItemDetail> Items
     {
-        public int Status { get; set; }
-        public MapData Data { get; set; }
+        get; set;
     }
 }
+
+public class ShopSection
+{
+    public string Name { get; set; }
+    public List<ShopEntry> Entries { get; set; }
+}
+
+public class ShopData
+{
+    public List<ShopSection> Sections { get; set; }
+}
+
+public class FortniteShopResponse
+{
+    public int Status { get; set; }
+    public ShopData Data { get; set; }
+}
+
