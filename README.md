@@ -22,6 +22,7 @@ All commands are Slash Commands (`/`) and will appear as you type.
 | :--- | :--- | :--- |
 | `/map` | Displays the current Fortnite Battle Royale map with Points of Interest (POIs). | `/map` |
 | `/shop` | Displays the current Item Shop. | `/shop` |
+* Disclaimer: `/shop` is not working due to an issue. I will fix this as soon as I can.
 
 ## Developer Setup (C#)
 
