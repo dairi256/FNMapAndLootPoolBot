@@ -8,7 +8,7 @@ public class FortniteApiService
 {
     private static readonly HttpClient _httpClient = new();
 
-    private const string ShopEndpoint = "https://fortnite-api.com/v2/shop/br";
+    private const string ShopEndpoint = "https://fortnite-api.com/v2/shop?language=en";
     private const string MapEndpoint = "https://fortnite-api.com/v1/map";
 
     public async Task<string> GetMapImageUrlAsync()
@@ -52,43 +52,45 @@ public class FortniteApiService
 
         try
         {
-            var jsonString = await _httpClient.GetStringAsync(ShopEndpoint);
+            var response = await _httpClient.GetAsync(ShopEndpoint);
+            var jsonString = await response.Content.ReadAsStringAsync();
 
             var shopResponse = JsonSerializer.Deserialize<FortniteShopResponse>(
                 jsonString,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
             );
 
-            // Loop through all sections (e.g., Featured, Daily, Special Offers)
-            if (shopResponse?.Data?.Sections != null)
-            {
-                foreach (var section in shopResponse.Data.Sections)
-                {
-                    // The API names the section in its 'name' property
-                    string sectionName = section.Name ?? "Uncategorized";
+            Console.WriteLine($"Found {shopResponse.Data.Entries.Count} items in total");
 
-                    // Loop through all entries in that section
-                    if (section.Entries != null)
+            foreach (var entry in shopResponse.Data.Entries)
+            {
+                string sectionName = entry.Section?.Name ?? "Featured";
+
+                if (entry.Bundle != null && entry.Bundle.Name != null)
+                {
+                    items.Add(new ShopItem
                     {
-                        foreach (var entry in section.Entries)
+                        Name = entry.Bundle.Name,
+                        VBucksCost = entry.FinalPrice,
+                        SectionName = sectionName
+                    });
+                }
+
+                if (entry.Items != null)
+                {
+                    foreach (var itemDetail in entry.Items)
+                    {
+                        items.Add(new ShopItem
                         {
-                            // A single entry can contain multiple items (e.g., bundles)
-                            if (entry.Items != null)
-                            {
-                                foreach (var itemDetail in entry.Items)
-                                {
-                                    items.Add(new ShopItem
-                                    {
-                                        Name = itemDetail.Name,
-                                        VBucksCost = entry.RegularPrice,
-                                        SectionName = sectionName
-                                    });
-                                }
-                            }
-                        }
+                            Name = itemDetail.Name ?? "Unknown Item",
+                            VBucksCost = entry.FinalPrice,
+                            SectionName = sectionName
+                        });
                     }
                 }
             }
+
+            Console.WriteLine($"Total items collected: {items.Count}");
         }
         catch (HttpRequestException ex)
         {
@@ -96,7 +98,7 @@ public class FortniteApiService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Shop Deserialization Error: {ex.Message}");
+            Console.WriteLine($"Unexpected Error: {ex.Message}");
         }
 
         return items;
@@ -131,13 +133,23 @@ public class ItemDetail
     public string Name { get; set; }
 }
 
+// Required to parse shop entries
+public class BundleInfo
+{
+    public string Name { get; set; }
+}
+public class SectionInfo
+{
+    public string Name { get; set; }
+}
+
 public class ShopEntry
 {
     public int RegularPrice { get; set; }
-    public List<ItemDetail> Items
-    {
-        get; set;
-    }
+    public int FinalPrice { get; set; }
+    public BundleInfo Bundle { get; set; }
+    public List<ItemDetail> Items { get; set; }
+    public SectionInfo Section { get; set; }
 }
 
 public class ShopSection
@@ -148,7 +160,7 @@ public class ShopSection
 
 public class ShopData
 {
-    public List<ShopSection> Sections { get; set; }
+    public List<ShopEntry> Entries { get; set; }
 }
 
 public class FortniteShopResponse

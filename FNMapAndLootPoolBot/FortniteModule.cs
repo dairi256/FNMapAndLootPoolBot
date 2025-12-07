@@ -42,7 +42,7 @@ public class FortniteModule : InteractionModuleBase<SocketInteractionContext>
     [SlashCommand("shop", "Shows the current Item Shop.")]
     public async Task GetShopCommand()
     {
-        await DeferAsync(ephemeral: true);
+        await DeferAsync(ephemeral: false); // Setting ephemeral to false to make it visible to everyone
 
         try
         {
@@ -83,7 +83,7 @@ public class FortniteModule : InteractionModuleBase<SocketInteractionContext>
         }
         catch (Exception ex)
         {
-            await FollowupAsync($"An error occurred while fetching the shop data: {ex.Message}", ephemeral: true);
+            await FollowupAsync($"An error occurred while fetching the shop data: {ex.Message}", ephemeral: false);
         }
     }
 }
