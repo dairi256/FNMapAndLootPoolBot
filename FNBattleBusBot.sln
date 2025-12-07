@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.14.36603.0 d17.14
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11222.15 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNMapAndLootPoolBot", "FNMapAndLootPoolBot\FNMapAndLootPoolBot.csproj", "{8B915B9B-A05F-464A-AB3A-C67DCD1B026F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FNBattleBusBot", "FNMapAndLootPoolBot\FNBattleBusBot.csproj", "{8B915B9B-A05F-464A-AB3A-C67DCD1B026F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
