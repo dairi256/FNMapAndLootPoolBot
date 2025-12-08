@@ -1,4 +1,7 @@
-# Fortnite Battle Bus Bot  ![Static Badge](https://img.shields.io/badge/IN%20DEVELOPMENT-081461?style=for-the-badge)
+# Fortnite Battle Bus Bot  ![Static Badge](https://img.shields.io/badge/IN%20DEVELOPMENT-081461?style=for-the-badge) ![GitHub branch status](https://img.shields.io/github/checks-status/dairi256/FNBattleBusBot/master?style=for-the-badge)
+
+
+
 A custom Dicord bot created using C# and Discord.Net that provides users with the current map of the season and the current loot pool.
 
 ## Features
