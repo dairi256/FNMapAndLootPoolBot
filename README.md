@@ -2,7 +2,7 @@
 
 
 
-A custom Dicord bot created using C# and Discord.Net that provides users with the current map of the season and the current loot pool.
+A custom Dicord bot created using C# and Discord.Net that provides users with the related Fortnite commands.
 
 ## Features
 * **Current Map Command(`/map`):** When you type in this command, it will post an image of the current map from Fortnite API.
