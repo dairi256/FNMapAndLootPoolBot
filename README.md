@@ -25,6 +25,7 @@ All commands are Slash Commands (`/`) and will appear as you type.
 | :--- | :--- | :--- |
 | `/map` | Displays the current Fortnite Battle Royale map with Points of Interest (POIs). | `/map` |
 | `/shop` | Displays the current Item Shop. | `/shop` |
+| `/status` | Displays the current Epic Games Server Status. | `/status`|
 
 **Please Note:** All information is currently retreived via Fortnite-API.com. You can check their API Documentation here: https://dash.fortnite-api.com/
 
