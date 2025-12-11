@@ -5,11 +5,12 @@
 A custom Dicord bot created using C# and Discord.Net that provides users with the related Fortnite commands.
 
 ## Features
-* **Current Map Command(`/map`):** When you type in this command, it will post an image of the current map from Fortnite API.
 * **Discord Slash Commands:** Uses modern features for an easy and clean user expeience without the hassle of remembering commands.
+* **Epic Games Server Status:** When using the `/status` command, it fetches real time server status of Epic Games, which include Fortnite.
 
 ## Planned Features
 * Notification system for map changes.
+* Deep console logging and error handling for an intuitive and easy to use.
 
 ## Setup and Installation
 1. **Download Files:** Please download by ZIP.
@@ -19,7 +20,7 @@ A custom Dicord bot created using C# and Discord.Net that provides users with th
 
 ## Bot Commands
 
-All commands are Slash Commands (`/`) and will appear as you type.
+All commands are Slash Commands (`/`) and will appear as you type, or will be displayed once you type `/`.
 
 | Command | Description | Example |
 | :--- | :--- | :--- |
@@ -27,7 +28,7 @@ All commands are Slash Commands (`/`) and will appear as you type.
 | `/shop` | Displays the current Item Shop. | `/shop` |
 | `/status` | Displays the current Epic Games Server Status. | `/status`|
 
-**Please Note:** All information is currently retreived via Fortnite-API.com. You can check their API Documentation here: https://dash.fortnite-api.com/
+**Please Note:** All information is currently retreived via Fortnite-API.com and Epic Games.
 
 ## Developer Setup (C#)
 
