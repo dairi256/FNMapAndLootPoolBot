@@ -12,6 +12,7 @@ public class FortniteApiService
     private const string ShopEndpoint = "https://fortnite-api.com/v2/shop?language=en";
     private const string MapEndpoint = "https://fortnite-api.com/v1/map";
     private const string StatusEndpoint = "https://status.epicgames.com/api/v2/summary.json"; // This is the status endpoint
+    private const string NewsEndpoint = "https://fortnite-api.com/v2/news/br?language=en"; // Setting the language to english for this endpoint ensures that we get data that is in english
 
     public async Task<string> GetMapImageUrlAsync()
     {
@@ -140,6 +141,38 @@ public class FortniteApiService
         
     }
 
+    public async Task<List<NewsItem>> GetFortniteNewsAsync()
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync(NewsEndpoint);
+            var jsonString = await response.Content.ReadAsStringAsync();
+
+            var newsResponse = JsonSerializer.Deserialize<FortniteNewsResponse>(
+                jsonString,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                );
+
+            if (newsResponse?.Data.Motds != null)
+            {
+                return newsResponse.Data.Motds.Select(motd => new NewsItem
+                {
+                    Title = motd.Title,
+                    Body = motd.Body,
+                    Image = motd.Image
+                }).ToList();
+            }
+
+            return new List<NewsItem>();
+        }
+
+        catch (Exception ex)
+        {
+            Console.WriteLine($"API Error: {ex.Message}");
+            return new List<NewsItem>();
+        }
+    }
+
 }
 
 public class ShopItem
@@ -243,4 +276,28 @@ public class EpicStatusResponse
     public List<StatusIncident> Incidents { get; set; }
 }
 
+// Classes for News API
+public class NewsItem
+{
+    public string Title { get; set; }
+    public string Body { get; set; }
+    public string Image { get; set; }
+}
 
+public class NewsMotd
+{
+    public string Title { get; set; }
+    public string Body { get; set; }
+    public string Image { get; set; }
+}
+
+public class NewsData
+{
+    public List<NewsMotd> Motds { get; set; }
+}
+
+public class FortniteNewsResponse
+{
+    public int Status { get; set; }
+    public NewsData Data { get; set; }
+}

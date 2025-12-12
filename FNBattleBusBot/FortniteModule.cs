@@ -140,6 +140,43 @@ public class FortniteModule : InteractionModuleBase<SocketInteractionContext>
 
     }
 
+    [SlashCommand("news", "Displays the latest news in Fortnite including BR, STW and Creative modes.")]
+    public async Task GetNewsCommand()
+    {
+        await DeferAsync(ephemeral: false);
+        
+        var newsItems = await _apiService.GetFortniteNewsAsync();
+
+        if (newsItems == null || !newsItems.Any())
+        {
+            await FollowupAsync("No news is available at the moment. Please try again later.");
+            return;
+        }
+
+        var embed = new EmbedBuilder()
+            .WithTitle("Fortnite News")
+            .WithColor(new Color(0, 150, 255))
+            .WithCurrentTimestamp();
+
+        foreach (var news in newsItems.Take(3)) // This limits neews items to a max of 3 to appear on the embed
+        {
+            string body = news.Body.Length > 500
+                ? news.Body.Substring(0, 500) + "..."
+                : news.Body;
+
+            embed.AddField(news.Title, body, inline: false);
+        }
+
+        if (!string.IsNullOrEmpty(newsItems.First().Image))
+        {
+            embed.WithThumbnailUrl(newsItems.First().Image);
+        }
+
+        embed.WithFooter("Data from Fortnite-API.com");
+
+        await FollowupAsync(embed: embed.Build());
+    }
+
     private Color GetColorFromIndicator(string indicator)
     {
         return indicator switch
