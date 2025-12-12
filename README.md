@@ -10,12 +10,12 @@ A custom Dicord bot created using C# and Discord.Net that provides users with th
 
 ## Planned Features
 * Notification system for map changes.
-* Deep console logging and error handling for an intuitive and easy to use.
+* Deep console logging and error handling for an intuitive and easy to use bot.
 
 ## Setup and Installation
 1. **Download Files:** Please download by ZIP.
 2. **Bot Token::** If you are running your own instance, you must obtain your own key from the Discord Developer Portal and paste it into `appsettings.json` along with your server ID.
-3. **Run the Excecutable** Double-CLick the exe file (`FNMapAndLootPoolBot.exe`)
+3. **Run the Excecutable** Double-Click the exe file (`FNMapAndLootPoolBot.exe`)
 * **Disclaimer: Excecutable is not available as of yet, I am hoping to create it when I feel like the bot is ready.**
 
 ## Bot Commands
@@ -27,6 +27,7 @@ All commands are Slash Commands (`/`) and will appear as you type, or will be di
 | `/map` | Displays the current Fortnite Battle Royale map with Points of Interest (POIs). | `/map` |
 | `/shop` | Displays the current Item Shop. | `/shop` |
 | `/status` | Displays the current Epic Games Server Status. | `/status`|
+| `news` | Displays news related to BR, STW and Creative modes. | `/news`|
 
 **Please Note:** All information is currently retreived via Fortnite-API.com and Epic Games.
 
