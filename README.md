@@ -28,7 +28,7 @@ All commands are Slash Commands (`/`) and will appear as you type, or will be di
 | `/shop` | Displays the current Item Shop. | `/shop` |
 | `/status` | Displays the current Epic Games Server Status. | `/status`|
 | `/news` | Displays news related to BR, STW and Creative modes. | `/news`|
-| `/cosmetic` | Searches a name beased on user input. | `/news <cosmeticName>`|
+| `/cosmetic` | Searches a name based on user input. | `/news <cosmeticName>`|
 
 **Please Note:** All information is currently retreived via Fortnite-API.com and Epic Games.
 
