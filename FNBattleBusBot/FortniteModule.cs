@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Interactions;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
 // NOTE: You must also create the FortniteApiService and related models!
@@ -177,6 +178,47 @@ public class FortniteModule : InteractionModuleBase<SocketInteractionContext>
         await FollowupAsync(embed: embed.Build());
     }
 
+    [SlashCommand("cosmetic", "Searches for a fortnite cosmetic item.")]
+    public async Task GetCosmeticCommand(
+        [Summary("name", "the cosmetic item that you wish to search for.")] string itemName)
+    {
+        await DeferAsync(ephemeral: false);
+
+        var cosmetic = await _apiService.SearchCosmeticAsync(itemName);
+
+        if (cosmetic == null)
+        {
+            await FollowupAsync($"Could not find a cosmetic name with **{itemName}**. Please try again and enter a correct cosmetic name.");
+            return;
+        }
+
+        var embed = new EmbedBuilder()
+            .WithTitle($"{cosmetic.Name}")
+            .WithDescription(cosmetic.Description ?? "No description available.")
+            .WithColor(GetRarityColor(cosmetic.Rarity?.Value));
+
+        if (cosmetic.Type?.DisplayValue != null)
+        {
+            embed.AddField("Type", cosmetic.Type.DisplayValue, inline: true);
+        }
+        if (cosmetic.Rarity?.DisplayValue != null)
+        {
+            embed.AddField("Rarity", cosmetic.Rarity.DisplayValue, inline: true);
+        }
+        if (cosmetic.Introduction?.Text != null)
+        {
+            embed.AddField("Introduced", cosmetic.Introduction.Text, inline: true);
+        }
+
+        if (!string.IsNullOrEmpty(cosmetic.Images.Icon))
+        {
+            embed.WithImageUrl(cosmetic.Images?.Icon);
+        }
+        embed.WithFooter("Data from Fornite-API.com.");
+
+        await FollowupAsync(embed: embed.Build());
+    }
+
     private Color GetColorFromIndicator(string indicator)
     {
         return indicator switch
@@ -198,6 +240,20 @@ public class FortniteModule : InteractionModuleBase<SocketInteractionContext>
             "partial_outage" => "🟠",
             "major_outage" => "🔴",
             _ => "⚪"
+        };
+    }
+
+    // Rarity Colors
+    private Color GetRarityColor(string rarity)
+    {
+        return rarity?.ToLower() switch
+        {
+            "legendary" => new Color(211, 120, 65),
+            "epic" => new Color(177, 91, 226),
+            "rare" => new Color(73, 172, 242),
+            "uncommon" => new Color(96, 170, 58),
+            "common" => new Color(190, 190, 190),
+            _ => Color.Default
         };
     }
 }

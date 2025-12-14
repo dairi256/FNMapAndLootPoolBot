@@ -13,6 +13,7 @@ public class FortniteApiService
     private const string MapEndpoint = "https://fortnite-api.com/v1/map";
     private const string StatusEndpoint = "https://status.epicgames.com/api/v2/summary.json"; // This is the status endpoint
     private const string NewsEndpoint = "https://fortnite-api.com/v2/news/br?language=en"; // Setting the language to english for this endpoint ensures that we get data that is in english
+    private const string CosmeticSearchEndpoint = "https://fortnite-api.com/v2/cosmetics/br/search";
 
     public async Task<string> GetMapImageUrlAsync()
     {
@@ -173,6 +174,32 @@ public class FortniteApiService
         }
     }
 
+    public async Task<CosmeticItem> SearchCosmeticAsync(string name)
+    {
+        try
+        {
+            var response = await _httpClient.GetAsync($"{CosmeticSearchEndpoint}?name={Uri.EscapeDataString(name)}&language=en");
+            var jsonString = await response.Content.ReadAsStringAsync();
+
+            if (!response.IsSuccessStatusCode)
+            {
+                Console.WriteLine($"Cosmetic Search API Error: {response.StatusCode}");
+                return null;
+            }
+
+            var cosmeticResponse = JsonSerializer.Deserialize<FortniteCosmeticResponse>(
+                jsonString,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            );
+            return cosmeticResponse.Data;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Cosmetic Search API Error: {ex.Message}");
+            return null;
+        }
+    }
+
 }
 
 public class ShopItem
@@ -300,4 +327,49 @@ public class FortniteNewsResponse
 {
     public int Status { get; set; }
     public NewsData Data { get; set; }
+}
+
+// Classes for Cosmetic Search
+
+public class CosmeticItem
+{
+    public string Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public CosmeticType Type { get; set; }
+    public CosmeticRarity Rarity { get; set; }
+    public CosmeticImages Images { get; set; }
+    public CosmeticIntroduction Introduction { get; set; }
+}
+
+public class CosmeticType
+{
+    public string Value { get; set; }
+    public string DisplayValue { get; set; }
+}
+
+public class CosmeticRarity
+{
+    public string Value { get; set; }
+    public string DisplayValue { get; set; }
+}
+
+
+public class CosmeticImages
+{
+    public string Icon { get; set; }
+    public string Featured { get; set; }
+}
+
+public class CosmeticIntroduction
+{
+    public string Chapter { get; set; }
+    public string Season { get; set; }
+    public string Text { get; set; }
+}
+
+public class FortniteCosmeticResponse
+{
+    public int Status { get; set; }
+    public CosmeticItem Data { get; set; }
 }
