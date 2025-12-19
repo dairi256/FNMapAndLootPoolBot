@@ -13,10 +13,9 @@ A custom Dicord bot created using C# and Discord.Net that provides users with th
 * Deep console logging and error handling for an intuitive and easy to use bot.
 
 ## Setup and Installation
-1. **Download Files:** Please download by ZIP.
+1. **Download Files:** Please download the .zip that is located at the root of this repository.
 2. **Bot Token:** If you are running your own instance, you must obtain your own key from the Discord Developer Portal and paste it into `appsettings.json` along with your server ID.
 3. **Run the Excecutable** Double-Click the exe file (`FNMapAndLootPoolBot.exe`)
-* **Disclaimer: Excecutable is not available as of yet, I am hoping to create it when I feel like the bot is ready.**
 
 ## Bot Commands
 
