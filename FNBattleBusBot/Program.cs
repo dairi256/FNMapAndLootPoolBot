@@ -29,7 +29,7 @@ public class Program
     public async Task ClientReady()
     {
         await _interactions.AddModulesAsync(Assembly.GetEntryAssembly(), _services);
-        if (ulong.TryParse(_config["TestGuildId"], out ulong guildId))
+        if (ulong.TryParse(_config["GuildId"], out ulong guildId))
         {
             await _interactions.RegisterCommandsToGuildAsync(guildId);
             Console.WriteLine($"Registered commands to Guild: {guildId}");
@@ -46,7 +46,7 @@ public class Program
     {
         _config = new ConfigurationBuilder()
         .SetBasePath(AppContext.BaseDirectory)
-        .AddUserSecrets<Program>()
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .AddEnvironmentVariables()
         .Build();
 
